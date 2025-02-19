@@ -44,11 +44,11 @@ app.get('/check_chunks', (req, res) => {
 })
 
 app.post('/upload_video', async (req, res) => {
-    await new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve()
-        }, 2000)
-    })
+    // await new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //         resolve()
+    //     }, 2000)
+    // })
     const { file } = req.files;
     const {
         fileHash,

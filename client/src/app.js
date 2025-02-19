@@ -97,14 +97,17 @@ import {
         fileHash,
         type,
     }) {
-        const uploadPromises = [];
+        const uploadPromises = [[]];
         for(let i = 0; i < totalChunks; i ++) {
             if (uploadedChunkIndexs.includes(i)) {
                 continue;//跳过已上传的切片
             }
             const chunk = file.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE);
+            if(uploadPromises[uploadPromises.length - 1].length >= PROMISE_SIZE) {
+                uploadPromises.push([])
+            }
             //并发上传
-            uploadPromises.push(doUpload({
+            uploadPromises[uploadPromises.length - 1].push(uploadFactory({
                 file: chunk,
                 fileName: file.name,
                 chunkIndex: i,
@@ -113,16 +116,18 @@ import {
                 type
             }));
         }
-        try {
-            await Promise.all(uploadPromises);
-        } catch (e) {
-            uploadHandler(file);//重试
-            throw e
+        for(let i = 0; i < uploadPromises.length; i++) {
+            try {
+                await Promise.all(uploadPromises[i].map(item => item()));
+            } catch (e) {
+                uploadHandler(file);//重试
+                throw e
+            }
         }
         console.log('所有切片上传完成');
     }
 
-    async function doUpload({
+     function uploadFactory({
         file,
         fileName,
         fileHash,
@@ -130,20 +135,22 @@ import {
         totalChunks,
         type,
     }) {
-        const formData = createFormData({
-            file,
-            fileName,
-            fileHash,
-            chunkIndex,
-            totalChunks,
-            type,
-        })
-        console.log(formData.get('fileName'), formData.get('chunkIndex'))
-        await fetch(API.UPLOAD_VIDEO, {
-            method: 'POST',
-            body: formData
-        });
-        oProgress.value = Number(oProgress.value) + 1;
+        return async () => {
+            const formData = createFormData({
+                file,
+                fileName,
+                fileHash,
+                chunkIndex,
+                totalChunks,
+                type,
+            })
+            console.log(formData.get('fileName'), formData.get('chunkIndex'))
+            await fetch(API.UPLOAD_VIDEO, {
+                method: 'POST',
+                body: formData
+            });
+            oProgress.value = Number(oProgress.value) + 1;
+        }
     }
 
     function createFormData({
