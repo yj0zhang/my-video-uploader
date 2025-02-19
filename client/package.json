@@ -12,8 +12,5 @@
   "type": "module",
   "devDependencies": {
     "vite": "^6.1.0"
-  },
-  "dependencies": {
-    "axios": "^1.7.9"
   }
 }

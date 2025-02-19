@@ -12,9 +12,13 @@ export const ALLOWED_TYPE = {
     'video/ogg': 'ogg',
 }
 
-export const CHUNK_SIZE = 64 * 1024;
+export const CHUNK_SIZE = 1024 * 1024;
+
+export const PROMISE_SIZE = 5;
 
 export const API = {
-    UPLOAD_VIDEO: BASE_URL + 'upload_video'
+    UPLOAD_VIDEO: BASE_URL + 'upload_video',
+    MERGE_VIDEO: BASE_URL + 'merge_video',
+    CHECK_CHUNKS: BASE_URL + 'check_chunks',
 }
 

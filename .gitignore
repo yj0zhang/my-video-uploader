@@ -1,2 +1,4 @@
 node_modules
 yarn.lock
+upload_temp
+package-lock.json

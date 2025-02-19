@@ -8,17 +8,17 @@ module.exports = {
             code: 1002,
             msg: 'The type is not allowed for uploading'
         },
-        NO_FILE_EXISTS: {
+        CHUNK_LOSE: {
             code: 1003,
-            msg: 'No file exists'
+            msg: 'File chunk losed'
         },
         APPENDED: {
             code: 0,
             msg: 'Appended'
         },
-        CREATED: {
+        MERGED: {
             code: 0,
-            msg: 'File is Created'
+            msg: 'File is merged'
         },
     },
     ALLOWED_TYPE: {
